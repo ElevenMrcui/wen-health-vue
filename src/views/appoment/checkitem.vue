@@ -217,15 +217,7 @@ export default {
   },
     //钩子函数，VUE对象初始化完成后自动执行
             created() {
-                // var token =  this.$store.state.userInfo.token
-                // if(token!=null){
                     this.findPage()
-                // }else{
-                // this.$router.replace({ name: "login" });
-                // }
-               
-        
-            
             },
             methods:{            
                         findPage(){
