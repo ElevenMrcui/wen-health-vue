@@ -3,7 +3,7 @@ module.exports = {
   lintOnSave: false,
   devServer: {
     port:8020,
-    proxy: {   //  解决 跨域问题   配置后台服务器地址
+    proxy: {   //  解决 跨域问题   配置后台服务器地址  黑马114
       '/api': {
         target: 'http://localhost:8081',
         changeOrigin: true,
