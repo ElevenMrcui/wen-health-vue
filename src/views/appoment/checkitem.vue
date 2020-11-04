@@ -107,7 +107,7 @@
                             </el-form>
                             <div slot="footer" class="dialog-footer">
                                 <el-button @click="dialogFormVisible = false">取消</el-button>
-                                <el-button type="primary" @click="handleAdd">确定</el-button>
+                                <el-button type="primary" @click="handleAdd('dataAddForm')">确定</el-button>
                             </div>
                         </el-dialog>
                     </div>
@@ -176,7 +176,7 @@
                             </el-form>
                             <div slot="footer" class="dialog-footer">
                                 <el-button @click="dialogFormVisible4Edit = false">取消</el-button>
-                                <el-button type="primary" @click="handleEdit">确定</el-button>
+                                <el-button type="primary" @click="handleEdit('dataEditForm')">确定</el-button>
                             </div>
                         </el-dialog>
                     </div>
@@ -195,7 +195,7 @@ export default {
 					  total:0,//总记录数
 					  queryString:null//查询条件   双向绑定
 				},
-				dataList: [],//当前页要展示的分页列表数据
+				dataList: [],//当前页要展示的分页列表数据  [{},{}]  List<T>
                 formData: {},//表单数据  添加检查项  formData提交给后台
                 dialogFormVisible: false,//增加表单是否可见
                 dialogFormVisible4Edit:false,//编辑表单是否可见
@@ -217,18 +217,121 @@ export default {
   },
     //钩子函数，VUE对象初始化完成后自动执行
             created() {
-                    this.findPage()
+                this.findPage()
             },
-            methods:{            
-                        findPage(){
-                            this.$http.get("api/checkitem/findAll").then((res)=>{
-                                 if(res.data.flag){
-                                     alert(JSON.stringify(res.data.data))
-                                 }else{
-                                     this.$message.error(res.data.message)
-                                 }
-                            })
-                        }
+            methods:{  
+
+                        // 编辑数据 提交  
+                        
+                    handleEdit(ruleForm){
+                      //  调用 添加业务逻辑 
+                        this.handleAdd(ruleForm)
+                
+                    },
+
+
+                // 编辑  弹出窗体 回显当条记录    servlet  response  string
+                  handleUpdate(row){
+                         let  jsonString = JSON.stringify(row) //  json对象 转换 普通 字符串 json
+                         let  jsonObj = JSON.parse(jsonString) //  json格式字符串 转换 js对象
+                         this.dialogFormVisible4Edit = true
+                         this.formData = jsonObj  //   当前记录 id  
+                       
+                  },  
+
+
+                    //  逻辑删除  
+                    handleDelete(row){
+                    
+                          this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+                                confirmButtonText: '确定',
+                                cancelButtonText: '取消',
+                                type: 'warning'
+                                }).then(() => {
+
+                                //  逻辑删除请求 
+                                this.$http.delete("api/checkitem/deleteCheckItemById/"+row.id).then((res)=>{
+                                    if(res.data.flag){
+                                       this.findPage() //  重新查询一次
+                                    }else{
+                                        this.$message.error(res.data.message)
+                                    }
+                                })
+ 
+                        
+                                }).catch(() => {
+                                this.$message({
+                                    type: 'info',
+                                    message: '已取消删除'
+                                });          
+                                });
+
+
+                    },
+
+
+
+                //  条件分页查询   无条件分页查询 
+                findPageByCondition(){
+                    this.pagination.currentPage=1
+                    this.findPage()
+                },
+
+
+                 // 页码变化  触发分页查询  
+                 handleCurrentChange(pageNum){
+                     this.pagination.currentPage=pageNum
+                     this.findPage()
+                 },
+
+                
+                // 分页查询  
+                findPage(){
+                    //  第一次分页查询 
+                      this.$http.post("api/checkitem/findPage",this.pagination).then((res)=>{
+                          //  res.data  = Result  (total +  List<CheckItem>)
+                          //  res.data.data = Result.data = PageResult(total,rows)
+                          if(res.data.flag){
+                             this.dataList = res.data.data.rows
+                             this.pagination.total = res.data.data.total
+                          }else{
+                                this.$message.error(res.data.message)
+                          }
+
+                      })
+                },
+
+                 //  表单校验合法  提交
+                handleAdd(ruleForm){
+                    //  ref 
+                    this.$refs[ruleForm].validate((valid)=>{
+                       //  表单数据合法  将数据发送后台  完成检查项添加操作
+                       if(valid){
+                        // ajax  
+                          this.$http.post("api/checkitem/add",this.formData).then((res)=>{
+                              //  res.data = Result   flag    message  data
+                              if(res.data.flag){
+                                  //  重新查询一次
+                                  this.findPage()
+                                  //  当前窗口关闭 
+                                  this.dialogFormVisible = false
+                                this.dialogFormVisible4Edit = false
+                              }else{
+                                   this.$message.error(res.data.message)
+                              }
+                          })
+
+                       }else{
+                           this.$message.error("表单数据非法")
+                       }
+                    })
+
+                },
+                //   点击弹窗   显示表单      
+              handleCreate(){
+                  this.dialogFormVisible = true
+                  this.formData ={}  //    弹出  清空 formData 数据
+              }
             }
   
 };
