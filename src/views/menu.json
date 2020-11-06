@@ -3,7 +3,14 @@
         "path": "1",
         "title": "工作台",
         "icon": "fa-dashboard",
-        "children": []
+        "children": [
+            {
+                "path": "/1-1",
+                "title": "首页",
+                "linkUrl": "checkitem",
+                "children": []
+            }
+        ]
     },
     {
         "path": "2",
@@ -89,6 +96,19 @@
                 "path": "/5-3",
                 "title": "运营报表统计",
                 "linkUrl": "report_business",
+                "children": []
+            }
+        ]
+    },
+    {
+        "path": "6",
+        "title": "恢复数据",
+        "icon": "fa-recovery",
+        "children":[
+            {
+                "path":"/6-1",
+                "title": "检查项历史数据",
+                "linkUrl": "recovery",
                 "children": []
             }
         ]
