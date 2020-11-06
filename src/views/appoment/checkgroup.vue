@@ -300,7 +300,7 @@ export default {
         },
 
         //新增检查组信息
-        handleAdd(ruleForm){
+        handleAdd(ruleForm){        
             //校验表单数据
             this.$refs[ruleForm].validate((valid)=>{
                 if(valid){
@@ -381,6 +381,7 @@ export default {
                 });  
             });  
         }
+        //提交git
     }
         
 
