@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="content-header">
-                <h1>预约管理<small>套餐管理</small></h1>
+                <h1>套餐管理<small>预约管理</small></h1>
                 <el-breadcrumb separator-class="el-icon-arrow-right" class="breadcrumb">
                     <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
                     <el-breadcrumb-item>预约管理</el-breadcrumb-item>
@@ -14,6 +14,7 @@
                         <el-input placeholder="编码/名称/助记码" v-model="pagination.queryString" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter"></el-input>
                         <el-button @click="findPageByCondition" class="dalfBut">查询</el-button>
                         <el-button type="primary" class="butT" @click="handleCreate">新建</el-button>
+                        <el-button type="primary" class="butT" @click="reset">清空</el-button>
                     </div>
                     <el-table size="small" current-row-key="id" :data="dataList" stripe highlight-current-row>
                         <el-table-column type="index" align="center" label="序号"></el-table-column>
@@ -44,6 +45,7 @@
                             :total="pagination.total">
                         </el-pagination>
                     </div>
+
                     <!-- 新增标签弹层 -->
                     <div class="add-form">
                         <el-dialog title="新增套餐" :visible.sync="dialogFormVisible">
@@ -96,7 +98,7 @@
                                                     <el-form-item label="上传图片">
                                                         <el-upload
                                                                 class="avatar-uploader"
-                                                                action="/setmeal/upload.do"
+                                                                action="api/setMeal/upload"
                                                                 :auto-upload="autoUpload"
                                                                 name="imgFile"
                                                                 :show-file-list="false"
@@ -152,7 +154,7 @@
                             </template>
                             <div slot="footer" class="dialog-footer">
                                 <el-button @click="dialogFormVisible = false">取消</el-button>
-                                <el-button type="primary" @click="handleAdd()">确定</el-button>
+                                <el-button type="primary" @click="handleAdd('addSetMealForm')">确定</el-button>
                             </div>
                         </el-dialog>
                     </div>
@@ -195,11 +197,108 @@ export default {
                 }
         }
     },
-    created(){},
-    methods(){
+    //初始化数据
+    created(){
+        this.findPage()
+    },
+    //事件方法
+    methods: {
+
+        //提交数据
+        handleAdd(ruleForm){        
+            //校验表单数据
+            this.$refs[ruleForm].validate((valid)=>{
+                if(valid){
+                     //校验检查组是否选择
+                    if(this.checkgroupIds == 0){
+                        this.$message.error("至少选择一个检查组")
+                        this.activeName = "second"
+                        return
+                    };
+
+                    this.formData.checkgroupIds =this.checkgroupIds
+                    this.$http.post("api/setMeal/add",this.formData).then((res)=>{
+                        if(res.data.flag){
+                            //关闭窗口
+                            this.dialogFormVisible = false;
+                            this.dialogFormVisible4Edit =false;
+                            //回到首页
+                            this.findPage()
+                        }else{
+                            this.$message.error(res.data.message)
+                        }
+                    })
+                }
+            })
+        },
+
+        //实现图片回显
+        handleAvatarSuccess(res) {
+            this.imageUrl ="https://wen-health.oss-cn-shanghai.aliyuncs.com/" + res.data;
+            this.formData.img = res.data;
+        },
+        
+        //上传图片到服务器
+        beforeAvatarUpload(file) {
+            const isJPG = file.type === 'image/jpeg';
+            const isLt2M = file.size / 1024 / 1024 < 2;
+
+            if (!isJPG) {
+                this.$message.error('上传头像图片只能是 JPG 格式!');
+            }
+            if (!isLt2M) {
+                this.$message.error('上传头像图片大小不能超过 2MB!');
+            }
+            return isJPG && isLt2M;
+        },
+
+        //弹出新建套餐窗口
+        handleCreate(){
+            this.dialogFormVisible = true;
+            this.formData = {}
+            this.checkgroupIds = []
+            this.activeName = 'first'
+            this.imageUrl = ''
+            //查询所有检查组信息
+            this.$http.get("api/checkGroup/findAll").then((res)=>{
+                if(res.data.flag){
+                    this.tableData = res.data.data
+                }
+            })
+        },
+
+        //分页查询
+        findPage(){
+            this.$http.post("api/setMeal/findPage", this.pagination).then((res) => {
+                if (res.data.flag) {
+                    this.dataList = res.data.data.rows;
+                    this.pagination.total = res.data.data.total;
+                } else {
+                    this.$message.error(res.data.message);
+                }
+            });
+        },
+        
+        //页码改变事件
+        handleCurrentChange(curPage){
+            this.pagination.currentPage = curPage;
+            this.findPage()
+        },
+
+        //条件查询
+        findPageByCondition(){
+            this.pagination.currentPage = 1
+            this.findPage()
+        },
+
+        //重置查询条件
+        reset(){
+            this.pagination.queryString="";
+            this.findPage()
+        },
+
 
     }
-
 }
 </script>
 

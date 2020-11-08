@@ -14,7 +14,7 @@
                         <el-input placeholder="编码/名称/助记码" v-model="pagination.queryString" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter"></el-input>
                         <el-button @click="findPageByCondition" class="dalfBut">查询</el-button>
                         <el-button type="primary" class="butT" @click="handleCreate()">新建</el-button>
-                        <el-button type="primary" class="butT" @click="reset">重置</el-button>
+                        <el-button type="primary" class="butT" @click="reset">清空</el-button>
                     </div>
                     <el-table size="small" current-row-key="id" :data="dataList" stripe highlight-current-row>
                         <el-table-column type="index" align="center" label="序号"></el-table-column>
@@ -381,8 +381,6 @@ export default {
                 });  
             });  
         }
-        //提交gitee
-    
     }
         
 

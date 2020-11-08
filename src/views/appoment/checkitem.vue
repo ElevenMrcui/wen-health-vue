@@ -24,7 +24,7 @@
             >新建</el-button
           >
           <el-button type="primary" class="butT" @click="reset"
-            >重置</el-button
+            >清空</el-button
           >
         </div>
         <el-table
