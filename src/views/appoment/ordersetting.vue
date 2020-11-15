@@ -39,28 +39,38 @@
               slot="dateCell"
               slot-scope="{date, data}">
               <div v-if="settingData[data.day]">
+                
                 <div v-if="settingData[data.day].number == settingData[data.day].reservations" 
-                  style="background-color:red;height:85px;">
-                 <div><font color='blue'>{{data.day}}</font></div>
+                  style="background-color: #F5BCA9 ; height:85px;">
+                 
+                  <div><font color='black'>{{data.day}}</font></div>
+                  
                   <div>{{settingData[data.day].reservations}}/{{settingData[data.day].number}}</div>
-                  <div>已满</div>
+                  
+                  <div>预约已满</div>
                 </div>
 
-                <div v-else style="background-color:lightblue;height:85px;">
-                  <div><font color='blue'>{{data.day}}</font></div>
+                <div v-else style="background-color:#C4EDCD ; height:85px;">
+                
+                  <div><font color='black'>{{data.day}}</font></div>
+                
                   <div>{{settingData[data.day].reservations}}/{{settingData[data.day].number}}</div>
-                  <div><button
-                   @click="goSetting(data.day)"><i class="el-icon-setting"></i>设置</button></div>
+                
+                  <div><el-button size="small"  @click="goSetting(data.day)"  round>设置</el-button></div>
+
                 </div>
               </div>
 
               <div v-else>
+
                 <div v-if="data.type == 'current-month'" style="padding-top:25px;">
-                    <font color='blue'>{{data.day}}</font>
-                    <button @click="goSetting(data.day)"><i class="el-icon-setting"></i>设置</button>
+                    <font color='black'>{{data.day}}</font>
+                    <el-button size="small"  @click="goSetting(data.day)"  round>设置</el-button>
+                    <!-- <button @click="goSetting(data.day)"><i class="el-icon-setting"></i>设置</button> -->
                 </div>
-                <div v-else style="background-color:rgb(192,196,204);height:85px;width100%;">
-                </div>
+                
+                <div v-else style="background-color:rgb(192,196,204);height:85px;width100%;"></div>
+
               </div>
 
             </template>
@@ -137,7 +147,7 @@ export default {
 
     //
     loadData(){
-      this.findSettingDate(this.curday.getFullYear(),this.curday.getMonth()+1);
+      this.findSettingDate(this.curday.getFullYear(),this.curday.getMonth()+1);                                           
     },
 
     //

@@ -279,7 +279,7 @@ export default {
       pagination: {
         //分页相关模型数据
         currentPage: 1, //当前页码
-        pageSize: 5, //每页显示的记录数
+        pageSize: 10, //每页显示的记录数
         total: 0, //总记录数
         queryString: null, //查询条件   双向绑定
       },

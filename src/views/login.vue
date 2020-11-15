@@ -40,25 +40,25 @@ export default {
   methods:{
     login:function(){
       //跳转到主页
-      this.$router.replace({ name: "index" });
+      //this.$router.replace({ name: "index" });
 
-      // this.$refs.loginForm.validate((valid) =>{
-      //   if(valid){
-      //     this.$http.post('api/login',this.userInfo).then(res =>{
-      //       console.info(res.data.message)
-      //       if(res.data.flag){
-      //         // 用户认证成功 将用户信息和token存储起来
-      //         window.sessionStorage.setItem("token",res.data.message)
-      //         window.sessionStorage.setItem("username",this.userInfo.username)
-      //         //跳转到主页
-      //         this.$router.replace({ name: "index" });
-      //       }else{
-      //         this.$message.error(res.data.message);
-      //       }
-      //     });
+      this.$refs.loginForm.validate((valid) =>{
+        if(valid){
+          this.$http.post('api/login',this.userInfo).then(res =>{
+            console.info(res.data.message)
+            if(res.data.flag){
+              // 用户认证成功 将用户信息和token存储起来
+              window.sessionStorage.setItem("token",res.data.message)
+              window.sessionStorage.setItem("username",this.userInfo.username)
+              //跳转到主页
+              this.$router.replace({ name: "index" });
+            }else{
+              this.$message.error(res.data.message);
+            }
+          });
           
-      //   }
-      // });
+        }
+      });
     },
   }
 };

@@ -30,8 +30,8 @@
                         <el-table-column prop="remark" label="说明" align="center"></el-table-column>
                         <el-table-column label="操作" align="center">
                             <template slot-scope="scope">
-                                <el-button type="primary" size="mini">编辑</el-button>
-                                <el-button size="mini" type="danger">删除</el-button>
+                                <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">编辑</el-button>
+                                <el-button size="mini" type="danger"  @click="handleDelete(scope.row)">删除</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -88,8 +88,8 @@
                                                     </el-form-item>
                                                 </el-col>
                                                 <el-col :span="12">
-                                                    <el-form-item label="适用年龄" prop="age">
-                                                        <el-input v-model.number="formData.age"/>
+                                                    <el-form-item label="适用年龄" >
+                                                        <el-input v-model="formData.age"/>
                                                     </el-form-item>
                                                 </el-col>
                                             </el-row>
@@ -158,6 +158,119 @@
                             </div>
                         </el-dialog>
                     </div>
+
+                    <!-- 修改标签弹层 -->
+                    <div class="add-form">
+                        <el-dialog title="修改套餐" :visible.sync="dialogFormVisible4Edit">
+                            <template>
+                                <el-tabs v-model="activeName" type="card">
+                                    <el-tab-pane label="基本信息" name="first">
+                                        <el-form label-position="right" label-width="100px" :model="formData" ref="editSetMealForm"  :rules="rules">
+                                            <el-row>
+                                                <el-col :span="12">
+                                                    <el-form-item label="套餐编码" prop="code">
+                                                        <el-input v-model="formData.code"/>
+                                                    </el-form-item>
+                                                </el-col>
+                                                <el-col :span="12">
+                                                    <el-form-item label="套餐名称" prop="name">
+                                                        <el-input v-model="formData.name"/>
+                                                    </el-form-item>
+                                                </el-col>
+                                            </el-row>
+                                            <el-row>
+                                                <el-col :span="12">
+                                                    <el-form-item label="适用性别">
+                                                        <el-select v-model="formData.sex">
+                                                            <el-option label="不限" value="0"></el-option>
+                                                            <el-option label="男" value="1"></el-option>
+                                                            <el-option label="女" value="2"></el-option>
+                                                        </el-select>
+                                                    </el-form-item>
+                                                </el-col>
+                                                <el-col :span="12">
+                                                    <el-form-item label="助记码">
+                                                        <el-input v-model="formData.helpCode"/>
+                                                    </el-form-item>
+                                                </el-col>
+                                            </el-row>
+                                            <el-row>
+                                                <el-col :span="12">
+                                                    <el-form-item label="套餐价格">
+                                                        <el-input v-model="formData.price"/>
+                                                    </el-form-item>
+                                                </el-col>
+                                                <el-col :span="12">
+                                                    <el-form-item label="适用年龄" >
+                                                        <el-input v-model="formData.age"/>
+                                                    </el-form-item>
+                                                </el-col>
+                                            </el-row>
+                                            <el-row>
+                                                <el-col :span="24">
+                                                    <el-form-item label="上传图片">
+                                                        <el-upload
+                                                                class="avatar-uploader"
+                                                                action="api/setMeal/upload"
+                                                                :auto-upload="autoUpload"
+                                                                name="imgFile"
+                                                                :show-file-list="false"
+                                                                :on-success="handleAvatarSuccess"
+                                                                :before-upload="beforeAvatarUpload">
+                                                            <img v-if="imageUrl" :src="imageUrl" class="avatar">
+                                                            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                                                        </el-upload>
+                                                    </el-form-item>
+                                                </el-col>
+                                            </el-row>
+                                            <el-row>
+                                                <el-col :span="24">
+                                                    <el-form-item label="说明">
+                                                        <el-input v-model="formData.remark" type="textarea"></el-input>
+                                                    </el-form-item>
+                                                </el-col>
+                                            </el-row>
+                                            <el-row>
+                                                <el-col :span="24">
+                                                    <el-form-item label="注意事项">
+                                                        <el-input v-model="formData.attention" type="textarea"></el-input>
+                                                    </el-form-item>
+                                                </el-col>
+                                            </el-row>
+                                        </el-form>
+                                    </el-tab-pane>
+                                    <el-tab-pane label="检查组信息" name="second">
+										<div class="checkScrol">
+											<table class="datatable">
+												<thead>
+												<tr>
+													<th>选择</th>
+													<th>项目编码</th>
+													<th>项目名称</th>
+													<th>项目说明</th>
+												</tr>
+												</thead>
+												<tbody>
+												<tr v-for="c in tableData">
+													<td>
+														<input :id="c.id" v-model="checkgroupIds" type="checkbox" :value="c.id">
+													</td>
+													<td><label :for="c.id">{{c.code}}</label></td>
+													<td><label :for="c.id">{{c.name}}</label></td>
+													<td><label :for="c.id">{{c.remark}}</label></td>
+												</tr>
+												</tbody>
+											</table>
+										</div>
+                                    </el-tab-pane>
+                                </el-tabs>
+                            </template>
+                            <div slot="footer" class="dialog-footer">
+                                <el-button @click="dialogFormVisible = false">取消</el-button>
+                                <el-button type="primary" @click="handleEdit('editSetMealForm')">确定</el-button>
+                            </div>
+                        </el-dialog>
+                    </div>
                 </div>
             </div>
   </div>
@@ -181,6 +294,7 @@ export default {
                 tableData:[],//添加表单窗口中检查组列表数据
                 checkgroupIds:[],//添加表单窗口中检查组复选框对应id
                 dialogFormVisible: false,//控制添加窗口显示/隐藏
+                dialogFormVisible4Edit:false,//控制编辑窗口显示/隐藏
                 rules: {// 添加套餐的表格校验规则
                     code: [
                         { required: true, message: '套餐编码为必填项', trigger: 'blur' },
@@ -188,12 +302,12 @@ export default {
                     ],
                     name: [
                         { required: true, message: '套餐名称为必填项', trigger: 'blur' },
-                        { min: 2, max: 10, message: '长度在 2 到 10个字符', trigger: 'blur' }
+                        { min: 2, max: 50, message: '长度在 2 到 50个字符', trigger: 'blur' }
                     ],
-                    age: [
-                        { required: true, message: '年龄必填项', trigger: 'blur' },
-                        { type: 'number', min:1,message: '年龄必须为数字值' }
-                    ]
+                    // age: [
+                    //     { required: true, message: '年龄必填项', trigger: 'blur' },
+                    //     { type: 'number', min:1,message: '年龄必须为数字值' }
+                    // ]
                 }
         }
     },
@@ -217,11 +331,12 @@ export default {
                     };
 
                     this.formData.checkgroupIds =this.checkgroupIds
-                    this.$http.post("api/setMeal/add",this.formData).then((res)=>{
+                    this.$http.post("api/setMeal/addOrUpdate",this.formData).then((res)=>{
                         if(res.data.flag){
+                            this.$message.success("新增或修改成功")
                             //关闭窗口
                             this.dialogFormVisible = false;
-                            this.dialogFormVisible4Edit =false;
+                            this.dialogFormVisible4Edit = false;
                             //回到首页
                             this.findPage()
                         }else{
@@ -296,6 +411,56 @@ export default {
             this.pagination.queryString="";
             this.findPage()
         },
+
+        //弹出 编辑窗口
+        handleUpdate(row){
+            this.dialogFormVisible4Edit = true;
+            this.formData = row;
+            //查询所有检查组信息
+            this.$http.get("api/setMeal/findCheckGroupsBySetMealId/"+row.id).then((res)=>{
+                if(res.data.flag){
+                    this.tableData = res.data.data.checkGroupList;
+                    this.checkgroupIds = res.data.data.checkGroupIds;
+                }
+            })
+        },
+
+        //修改套餐信息
+        handleEdit(ruleForm){
+           this.handleAdd(ruleForm);
+        },
+
+        //删除套餐
+        handleDelete(row){
+            //弹出确认删除提示框  
+            this.$confirm('是否确认删除?', '提示', {  
+                confirmButtonText: '确定',  
+                cancelButtonText: '取消',  
+                type: 'warning'  
+            }).then(() => {  
+                //发送请求删除检查项  
+                this.$http.delete("api/setMeal/delete/"+row.id).then((res)=>{  
+                    if (res.data.flag){  
+                        this.$message.success("删除成功")  
+                         //判断当前页是否还有数据，没有跳转上一页
+                        if(this.dataList.length === 1){
+                            this.pagination.currentPage -= 1;
+                        }
+                        //重新查询分页数据  
+                        this.findPage();  
+                    } else{  
+                        //提示错误信息  
+                        this.$message.error(res.data.message)  
+                    }
+                })  
+            }).catch(() => {  
+                this.$message({  
+                type: 'info',  
+                message: '已取消删除'  
+                });  
+            });  
+
+        }
 
 
     }
