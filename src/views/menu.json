@@ -75,25 +75,58 @@
             }
         ]
     },
+
     {
         "path": "5",
+        "title": "用户管理",
+        "icon": "fa-userManage",
+        "children": [
+  
+            {
+                "path": "/5-1",
+                "title": "用户列表",
+                "linkUrl": "usersetting",
+                "children": []
+            },
+            {
+                "path": "/5-2",
+                "title": "角色管理",
+                "linkUrl": "role",
+                "children": []
+            },
+            {
+                "path": "/5-3",
+                "title": "权限管理",
+                "linkUrl": "permission",
+                "children": []
+            },
+            {
+                "path": "/5-4",
+                "title": "菜单管理",
+                "linkUrl": "menu",
+                "children": []
+            }
+        ]
+    },
+    {
+        "path": "6",
         "title": "统计分析",
         "icon": "fa-heartbeat",
         "children": [
             {
-                "path": "/5-1",
+                "path": "/6-1",
                 "title": "套餐占比",
                 "linkUrl": "report_setmeal",
                 "children": []
             },
             {
-                "path": "/5-2",
+                "path": "/6-2",
                 "title": "会员统计",
                 "linkUrl": "report_member",
                 "children": []
             },
             {
-                "path": "/5-3",
+                "path": "/6-3",
                 "title": "运营报表统计",
                 "linkUrl": "report_business",
                 "children": []
@@ -101,12 +134,12 @@
         ]
     },
     {
-        "path": "6",
+        "path": "7",
         "title": "恢复数据",
         "icon": "fa-recovery",
         "children":[
             {
-                "path":"/6-1",
+                "path":"/7-1",
                 "title": "检查项历史数据",
                 "linkUrl": "recovery",
                 "children": []

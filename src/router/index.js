@@ -61,7 +61,27 @@ const routes = [
         path: '/error',
         name: 'error',
         component: () => import('../views/error/error.vue')
-      }
+      },
+      {
+        path : '/usersetting',
+        name : 'usersetting',
+        component : () => import('../views/user/usersetting.vue')
+      },
+      ,{
+        path : '/role',
+        name : 'role',
+        component : () => import('../views/user/role.vue')
+      },
+      ,{
+        path : '/permission',
+        name : 'permission',
+        component : () => import('../views/user/permission.vue')
+      },
+      ,{
+        path : '/menu',
+        name : 'menu',
+        component : () => import('../views/user/menu.vue')
+      },
 
     ]
   }

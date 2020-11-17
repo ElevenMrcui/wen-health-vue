@@ -65,9 +65,9 @@ export default {
     methods:{
          //  用户退出功能
         logout(){
-       //   window.sessionStorage.removeItem("username")
-       //   window.sessionStorage.removeItem("token")
-       //   this.$router.replace({ name: "/" });
+         window.sessionStorage.removeItem("username")
+         window.sessionStorage.removeItem("token")
+         this.$router.replace({ name: "/login" });
         },
 
         goMenu:function(_name){
@@ -79,7 +79,7 @@ export default {
     },
     created(){
         this.menuList = mList;
-        // this.username = window.sessionStorage.getItem("username")
+        this.username = window.sessionStorage.getItem("username")
     }
 }
 </script>
