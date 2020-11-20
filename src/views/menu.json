@@ -121,12 +121,18 @@
             },
             {
                 "path": "/6-2",
+                "title": "会员占比",
+                "linkUrl": "report_memberProportion",
+                "children": []
+            },
+            {
+                "path": "/6-3",
                 "title": "会员统计",
                 "linkUrl": "report_member",
                 "children": []
             },
             {
-                "path": "/6-3",
+                "path": "/6-4",
                 "title": "运营报表统计",
                 "linkUrl": "report_business",
                 "children": []

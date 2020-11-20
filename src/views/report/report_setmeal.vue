@@ -25,8 +25,10 @@ export default {
     return {};
   },
   mounted: function () {
+    this.$http.get("api/report/setmealProportion").then((resp)=>{
+      if(resp.data.flag){
     var myChart1 = this.$echarts.init(document.getElementById("chart1"));
-    myChart1.setOption({
+      myChart1.setOption({
       title: {
         text: "套餐预约占比",
         subtext: "",
@@ -47,13 +49,7 @@ export default {
           type: "pie",
           radius: "55%",
           center: ["50%", "60%"],
-          data: [
-            { value: 335, name: "直接访问" },
-            { value: 310, name: "邮件营销" },
-            { value: 234, name: "联盟广告" },
-            { value: 135, name: "视频广告" },
-            { value: 1548, name: "搜索引擎" },
-          ],
+          data: resp.data.data ,
           itemStyle: {
             emphasis: {
               shadowBlur: 10,
@@ -64,6 +60,13 @@ export default {
         },
       ],
     });
+
+      }else{
+        this.$message.error(resp.data.message)
+      }
+    })
+  
+    
   },
 };
 </script>

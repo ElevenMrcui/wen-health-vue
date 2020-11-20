@@ -53,6 +53,11 @@ const routes = [
         component: () => import('../views/member/report_member.vue')
       },
       {
+        path: '/report_memberProportion',
+        name: 'report_memberProportion',
+        component: () => import('../views/report/report_memberProportion.vue')
+      },
+      {
         path: '/report_business',
         name: 'report_business',
         component: () => import('../views/report/report_business.vue')
